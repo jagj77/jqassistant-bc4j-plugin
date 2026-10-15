@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.jqassistant.plugin</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.9.1</version>
+    </parent>
+
+    <groupId>org.jqassistant.plugin.bc4j</groupId>
+    <artifactId>bc4j</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>jQAssistant BC4J Plugin</name>
+    <description>
+        Plugin de jQAssistant que escanea los XML de definicion BC4J
+        (Entity, ViewObject, ViewLink) dentro de cualquier .jar/.war del
+        classpath y crea nodos :Bc4jViewObject con su mapeo a tabla.
+        Habilita el cruce con las entidades JPA (regla :domain:JpaEntityTableMapping)
+        para identificar zonas donde BC4J y JPA operan sobre la misma fila.
+    </description>
+
+    <url>https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin</url>
+
+    <licenses>
+        <license>
+            <name>Proprietary</name>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>nca</id>
+            <name>NCA Team</name>
+            <email>nca@example.invalid</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin.git</developerConnection>
+        <url>https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.core</groupId>
+            <artifactId>store</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.core</groupId>
+            <artifactId>scanner</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.xo</groupId>
+            <artifactId>xo.api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.plugin</groupId>
+            <artifactId>common</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.plugin</groupId>
+            <artifactId>java</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.plugin</groupId>
+            <artifactId>xml</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+              El parent del plugin jQA fija <release>11</release> para
+              maven-compiler-plugin. Como uso switch expressions (Java 14+),
+              tengo que sobreescribir el plugin entero y forzar release 17.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <release>17</release>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+            <!--
+              El parent tambien fija <source>8</source> en maven-javadoc-plugin,
+              que rechaza las switch expressions. Lo deshabilitamos.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
