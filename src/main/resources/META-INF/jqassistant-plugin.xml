@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jqassistant-plugin xmlns="http://schema.jqassistant.org/plugin/v2.4"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://schema.jqassistant.org/plugin/v2.4 https://jqassistant.github.io/jqassistant/current/schema/jqassistant-plugin-v2.4.xsd"
+                    name="jQAssistant BC4J Plugin"
+                    id="jqa.plugin.bc4j"
+                    version="1.0.0">
+
+    <description>
+        Plugin de jQAssistant que escanea los XML de definicion BC4J
+        (Entity, ViewObject, ViewLink) dentro de los .jar/.war del classpath
+        y los expone como nodos :Bc4jViewObject con mapeo a tabla.
+        Habilita el cruce con las entidades JPA para detectar zonas donde
+        BC4J y JPA operan sobre la misma tabla (y por lo tanto la transaccion
+        puede descoordinarse).
+    </description>
+
+    <model>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewObjectDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jXmlFileDescriptor</class>
+    </model>
+
+    <scanner>
+        <class>org.jqassistant.plugin.bc4j.impl.scanner.Bc4jXmlScannerPlugin</class>
+    </scanner>
+
+</jqassistant-plugin>

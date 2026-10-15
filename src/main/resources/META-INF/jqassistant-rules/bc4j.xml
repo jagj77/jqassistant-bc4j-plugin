@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jqassistant-rules xmlns="http://schema.jqassistant.org/rule/v2.9">
+
+    <!--
+        Reglas del plugin BC4J.
+
+        Este archivo se carga cuando el plugin se incluye como dependencia
+        Maven del proyecto. Como el alcance de los archivos de reglas
+        locales (jqassistant/*.xml) es solo del proyecto analizado,
+        las reglas concretas (Cypher, conceptos, constraints) se prefieren
+        en un archivo local del proyecto. Ver:
+            jqassistant/bc4j-tables.xml
+
+        Por ahora dejamos este archivo vacio (sin reglas) para que el
+        plugin solo aporte el scanner y el modelo de datos (X descriptors).
+        Si en el futuro se quiere distribuir reglas reutilizables, se
+        pueden agregar aca y el proyecto las recibe automaticamente.
+    -->
+
+</jqassistant-rules>
