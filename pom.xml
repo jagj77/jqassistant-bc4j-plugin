@@ -12,7 +12,7 @@
 
     <groupId>org.jqassistant.plugin.bc4j</groupId>
     <artifactId>bc4j</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>jQAssistant BC4J Plugin</name>
@@ -23,7 +23,7 @@
         para analizar solapamientos con JPA.
     </description>
 
-    <url>https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin</url>
+    <url>https://github.com/jagj77/jqassistant-bc4j-plugin</url>
 
     <licenses>
         <license>
@@ -40,9 +40,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin.git</connection>
-        <developerConnection>scm:git:https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin.git</developerConnection>
-        <url>https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin</url>
+        <connection>scm:git:https://github.com/jagj77/jqassistant-bc4j-plugin.git</connection>
+        <developerConnection>scm:git:https://github.com/jagj77/jqassistant-bc4j-plugin.git</developerConnection>
+        <url>https://github.com/jagj77/jqassistant-bc4j-plugin</url>
     </scm>
 
     <properties>

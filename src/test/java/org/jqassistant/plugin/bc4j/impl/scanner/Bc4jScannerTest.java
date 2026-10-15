@@ -134,6 +134,23 @@ class Bc4jScannerTest extends AbstractPluginIT {
 
     }
     @Test
+    void preservesSchemaQualifiedFromListTables() throws Exception {
+        Scanner scanner = getScanner();
+        scanFixture(scanner, "bc4j/model/SchemaQualifiedFromListVO.xml");
+
+        assertThat(query("""
+                MATCH (viewObject:Bc4jViewObject {name: 'SchemaQualifiedFromListVO'})
+                UNWIND viewObject.tableNames AS tableName
+                RETURN tableName
+                """).getColumn("tableName"))
+                .containsExactlyInAnyOrder("SALES.ORDERS", "HR.EMPLOYEES");
+        assertThat(query("""
+                MATCH (viewObject:Bc4jViewObject {name: 'SchemaQualifiedFromListVO'})
+                RETURN viewObject.tableNamesComplete AS complete
+                """).getColumn("complete"))
+                .containsExactly(true);
+    }
+    @Test
     void extractsTablesFromExpertSqlQuery() throws Exception {
         Scanner scanner = getScanner();
         scanFixture(scanner, "bc4j/model/OrderTotalsVO.xml");
@@ -462,8 +479,25 @@ class Bc4jScannerTest extends AbstractPluginIT {
                 """).getColumn("entityAttribute"))
                 .containsExactly("EmployeeId");
     }
+    @Test
+    void stripsLeadingSlashFromArchiveComponentQualifiedNames() throws Exception {
+        Scanner scanner = getScanner();
+        scanFixture(scanner, "bc4j/model/EmployeeEO.xml", "/com/siderar/nca/model/EmployeeEO.xml");
+
+        assertThat(query("""
+                MATCH (entity:Bc4jEntity {name: 'EmployeeEO'})
+                RETURN entity.qualifiedName AS qualifiedName
+                """).getColumn("qualifiedName"))
+                .containsExactly("com.siderar.nca.model.EmployeeEO");
+    }
+
 
     private void scanFixture(Scanner scanner, String resourceName) throws IOException, URISyntaxException {
+        scanFixture(scanner, resourceName, resourceName.substring("bc4j/".length()));
+    }
+
+    private void scanFixture(Scanner scanner, String resourceName, String scanPath)
+            throws IOException, URISyntaxException {
         URL resourceUrl = getClass().getClassLoader().getResource(resourceName);
         assertThat(resourceUrl).as("BC4J fixture %s", resourceName).isNotNull();
         Path fixturePath = Paths.get(resourceUrl.toURI());
@@ -493,6 +527,6 @@ class Bc4jScannerTest extends AbstractPluginIT {
                 return "test";
             }
         };
-        scanner.scan(resource, resourceName.substring("bc4j/".length()), scope);
+        scanner.scan(resource, scanPath, scope);
     }
 }

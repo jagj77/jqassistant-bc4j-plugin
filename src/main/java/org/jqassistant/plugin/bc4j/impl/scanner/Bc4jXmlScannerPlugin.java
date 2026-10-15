@@ -583,11 +583,15 @@ public class Bc4jXmlScannerPlugin extends AbstractScannerPlugin<FileResource, Bc
         if (archiveSeparator >= 0) {
             normalized = normalized.substring(archiveSeparator + 2);
         }
+        int packageStart = 0;
+        while (packageStart < normalized.length() && normalized.charAt(packageStart) == '/') {
+            packageStart++;
+        }
         int separator = normalized.lastIndexOf('/');
-        if (separator < 0) {
+        if (separator < packageStart) {
             return name;
         }
-        String packagePath = normalized.substring(0, separator).replace('/', '.');
+        String packagePath = normalized.substring(packageStart, separator).replace('/', '.');
         return packagePath.isEmpty() ? name : packagePath + "." + name;
     }
 

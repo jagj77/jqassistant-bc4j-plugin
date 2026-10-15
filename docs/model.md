@@ -80,5 +80,5 @@ Entity and View Object attributes are stored as separate nodes, preserving the d
 - Entity Objects use `DBObjectName` as `tableName` and `DBObjectType` as `dbObjectType` (`table` is the default when the attribute is absent).
 - Entity-based View Objects resolve every `EntityUsage`; their table names come from the referenced Entity Objects.
 - Read-only/direct SQL View Objects use [JSqlParser 5.4](https://jsqlparser.github.io/JSqlParser/usage.html#find-table-names) on `FromList` or `SQLQuery`. `TablesNamesFinder` extracts sources from joins, nested queries, and set operations.
-- `tableNames` is the set of discovered sources. `tableNamesComplete` is false when Entity Usages are unresolved, SQL cannot be parsed, or no source table can be inferred. The scalar `tableName` is populated only when exactly one complete source exists.
+- `tableNames` is the set of discovered sources. Schema-qualified SQL sources retain their qualification. `tableNamesComplete` is false when Entity Usages are unresolved, SQL cannot be parsed, or no source table can be inferred. The scalar `tableName` is populated only when exactly one complete source exists.
 - Runtime connection strings and configuration values whose property names indicate credentials are not stored. The logical `JDBCName` and non-sensitive pool/database settings are retained.

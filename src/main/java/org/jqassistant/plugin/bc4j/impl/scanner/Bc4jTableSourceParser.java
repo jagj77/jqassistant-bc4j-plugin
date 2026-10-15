@@ -26,7 +26,7 @@ final class Bc4jTableSourceParser {
                     parser -> parser.withDialect(AbstractJSqlParser.Dialect.ORACLE));
             Set<String> tableNames = new LinkedHashSet<>();
             for (String table : new TablesNamesFinder<>().getTables(statement)) {
-                String name = unqualifiedName(table);
+                String name = qualifiedName(table);
                 if (!name.isEmpty()) {
                     tableNames.add(name);
                 }
@@ -49,21 +49,8 @@ final class Bc4jTableSourceParser {
         return "SELECT 1 FROM " + from;
     }
 
-    private static String unqualifiedName(String table) {
-        String name = table.strip();
-        int separator = name.lastIndexOf('.');
-        if (separator >= 0) {
-            name = name.substring(separator + 1);
-        }
-        if (name.length() >= 2) {
-            char first = name.charAt(0);
-            char last = name.charAt(name.length() - 1);
-            if ((first == '"' && last == '"') || (first == '`' && last == '`')
-                    || (first == '[' && last == ']')) {
-                name = name.substring(1, name.length() - 1);
-            }
-        }
-        return name;
+    private static String qualifiedName(String table) {
+        return table == null ? "" : table.strip();
     }
 
     record TableMappings(String[] tableNames, boolean complete) {

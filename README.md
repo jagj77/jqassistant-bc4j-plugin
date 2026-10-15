@@ -12,14 +12,14 @@ The scanner records relationships and query metadata; it does not execute BC4J S
 
 ## Quick start
 
-Install this artifact in the repository available to the consuming jQAssistant build (`mvn install` for a local checkout), then add it to the consumer's `.jqassistant.yml`:
+Install this artifact in the repository available to the consuming jQAssistant build (`mvn install -Djqassistant.skip=true` for a local checkout), then add it to the consumer's `.jqassistant.yml`. Run `mvn -Dtest=Bc4jScannerTest test` separately before installing; the plugin's self-analysis enforces a GitHub SCM owner under `jqassistant-plugin`, while this checkout is under `jagj77`.
 
 ```yaml
 jqassistant:
   plugins:
     - group-id: org.jqassistant.plugin.bc4j
       artifact-id: bc4j
-      version: 1.0.0
+      version: 1.0.2
   analyze:
     concepts:
       - bc4j:ResolveEntityReferences

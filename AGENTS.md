@@ -24,10 +24,11 @@ mvn -Dtest=Bc4jScannerTest test  # run BC4J graph integration tests
 mvn test                         # run the Maven test phase
 mvn clean package                # build the plugin JAR
 mvn clean verify                 # run the full Maven verification lifecycle
-mvn install                      # install the JAR for a consumer project
+mvn install -Djqassistant.skip=true  # install locally without the host-specific plugin self-analysis constraint
 ```
 
 The artifact is a plugin JAR, not a standalone application; exercise it through a jQAssistant host project. There is no Maven wrapper in the repository.
+The local self-analysis enforces a GitHub SCM owner under `jqassistant-plugin`; this repository currently lives under `jagj77`. Run the focused integration tests separately before installing with the skip flag.
 
 ## Code Conventions & Common Patterns
 

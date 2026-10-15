@@ -4,7 +4,7 @@
                     xsi:schemaLocation="http://schema.jqassistant.org/plugin/v2.4 https://jqassistant.github.io/jqassistant/current/schema/jqassistant-plugin-v2.4.xsd"
                     name="jQAssistant BC4J Plugin"
                     id="jqa.plugin.bc4j"
-                    version="1.0.0">
+                    version="1.0.2">
 
     <description>
         Plugin de jQAssistant que escanea definiciones BC4J y registra Entities,

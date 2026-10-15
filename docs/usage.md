@@ -2,14 +2,14 @@
 
 ## Install the plugin
 
-The Maven coordinates are `org.jqassistant.plugin.bc4j:bc4j:1.0.0`. Publish the artifact to a Maven repository available to the analyzed build, or run `mvn install` in this checkout for local development. jQAssistant discovers additional plugins from the `plugins` list in `.jqassistant.yml`:
+The Maven coordinates are `org.jqassistant.plugin.bc4j:bc4j:1.0.2`. Publish the artifact to a Maven repository available to the analyzed build, or run `mvn install -Djqassistant.skip=true` in this checkout for local development. Run `mvn -Dtest=Bc4jScannerTest test` separately before installing. The skip flag avoids the plugin self-analysis constraint that currently expects a GitHub SCM owner under `jqassistant-plugin`, while this repository is under `jagj77`.
 
 ```yaml
 jqassistant:
   plugins:
     - group-id: org.jqassistant.plugin.bc4j
       artifact-id: bc4j
-      version: 1.0.0
+      version: 1.0.2
 ```
 
 This follows the [jQAssistant plugin configuration](https://jqassistant.github.io/jqassistant/current/#_plugins). The consumer project also needs the jQAssistant Maven plugin configured.
@@ -23,7 +23,7 @@ jqassistant:
   plugins:
     - group-id: org.jqassistant.plugin.bc4j
       artifact-id: bc4j
-      version: 1.0.0
+      version: 1.0.2
   analyze:
     concepts:
       - bc4j:ResolveEntityReferences
