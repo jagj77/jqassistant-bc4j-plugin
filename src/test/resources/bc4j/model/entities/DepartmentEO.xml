@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Entity SYSTEM "jbo_03_01.dtd">
+<Entity Name="DepartmentEO" DBObjectName="DEPARTMENT" DBObjectType="table">
+    <Attribute Name="DepartmentId" ColumnName="DEPARTMENT_ID" Type="java.lang.Long" PrimaryKey="true"/>
+</Entity>

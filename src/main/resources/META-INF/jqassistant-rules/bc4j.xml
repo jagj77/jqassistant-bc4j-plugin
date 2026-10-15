@@ -1,20 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jqassistant-rules xmlns="http://schema.jqassistant.org/rule/v2.9">
 
-    <!--
-        Reglas del plugin BC4J.
+    <concept id="bc4j:ResolveEntityReferences">
+        <description>Resolves ViewObject entity usages and derives mapped database tables.</description>
+        <cypher><![CDATA[
+            MATCH (usage:Bc4jEntityUsage)
+            WHERE usage.entityFqn IS NOT NULL
+            MATCH (entity:Bc4jEntity)
+            WHERE entity.qualifiedName = usage.entityFqn
+            MERGE (usage)-[:REFERENCES_ENTITY]->(entity)
+            WITH DISTINCT usage
+            MATCH (viewObject:Bc4jViewObject)-[:HAS_ENTITY_USAGE]->(usage)
+            WITH DISTINCT viewObject
+            MATCH (viewObject)-[:HAS_ENTITY_USAGE]->(allUsage:Bc4jEntityUsage)
+            OPTIONAL MATCH (allUsage)-[:REFERENCES_ENTITY]->(mappedEntity:Bc4jEntity)
+            WITH viewObject,
+                 count(DISTINCT allUsage) AS usageCount,
+                 count(DISTINCT CASE WHEN mappedEntity IS NOT NULL THEN allUsage END) AS resolvedCount,
+                 count(DISTINCT CASE WHEN mappedEntity.tableName IS NOT NULL THEN allUsage END) AS mappedCount,
+                 collect(DISTINCT mappedEntity.tableName) AS tableNames
+            SET viewObject.tableNames = CASE WHEN size(tableNames) > 0 THEN tableNames ELSE null END,
+                viewObject.tableNamesComplete = (usageCount = resolvedCount AND usageCount = mappedCount),
+                viewObject.tableName = CASE WHEN size(tableNames) = 1 AND usageCount = resolvedCount
+                                                  AND usageCount = mappedCount
+                                            THEN tableNames[0] ELSE null END
+            RETURN viewObject
+        ]]></cypher>
+    </concept>
 
-        Este archivo se carga cuando el plugin se incluye como dependencia
-        Maven del proyecto. Como el alcance de los archivos de reglas
-        locales (jqassistant/*.xml) es solo del proyecto analizado,
-        las reglas concretas (Cypher, conceptos, constraints) se prefieren
-        en un archivo local del proyecto. Ver:
-            jqassistant/bc4j-tables.xml
+    <concept id="bc4j:ResolveViewLinkReferences">
+        <description>Resolves view-link endpoints to their source and target ViewObjects.</description>
+        <cypher><![CDATA[
+            MATCH (:Bc4jViewLink)-[:HAS_END]->(end:Bc4jViewLinkEnd)
+            MATCH (viewObject:Bc4jViewObject)
+            WHERE viewObject.qualifiedName = end.ownerViewObjectFqn
+            MERGE (end)-[:REFERENCES_VIEW_OBJECT]->(viewObject)
+            RETURN end
+        ]]></cypher>
+    </concept>
 
-        Por ahora dejamos este archivo vacio (sin reglas) para que el
-        plugin solo aporte el scanner y el modelo de datos (X descriptors).
-        Si en el futuro se quiere distribuir reglas reutilizables, se
-        pueden agregar aca y el proyecto las recibe automaticamente.
-    -->
+    <concept id="bc4j:ResolveApplicationModuleReferences">
+        <description>Resolves application-module view usages to ViewObjects.</description>
+        <cypher><![CDATA[
+            MATCH (usage:Bc4jViewUsage)
+            MATCH (viewObject:Bc4jViewObject)
+            WHERE viewObject.qualifiedName = usage.viewObjectFqn
+            MERGE (usage)-[:USES_VIEW_OBJECT]->(viewObject)
+            RETURN usage
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveAssociationReferences">
+        <description>Resolves entity-association ends to Entity Objects.</description>
+        <cypher><![CDATA[
+            MATCH (:Bc4jEntityAssociation)-[:HAS_END]->(end:Bc4jAssociationEnd)
+            MATCH (entity:Bc4jEntity)
+            WHERE entity.qualifiedName = end.ownerEntityFqn
+            MERGE (end)-[:REFERENCES_ENTITY]->(entity)
+            RETURN end
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveViewLinkAssociationReferences">
+        <description>Resolves ViewLinks to their referenced EntityAssociations.</description>
+        <cypher><![CDATA[
+            MATCH (viewLink:Bc4jViewLink)
+            WHERE viewLink.entityAssociationFqn IS NOT NULL
+            MATCH (association:Bc4jEntityAssociation)
+            WHERE association.qualifiedName = viewLink.entityAssociationFqn
+            MERGE (viewLink)-[:BASED_ON_ASSOCIATION]->(association)
+            RETURN viewLink
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveApplicationModuleConfiguration">
+        <description>Resolves runtime configuration entries to ApplicationModules.</description>
+        <cypher><![CDATA[
+            MATCH (configuration:Bc4jApplicationModuleConfig)
+            MATCH (applicationModule:Bc4jApplicationModule)
+            WHERE applicationModule.qualifiedName = configuration.applicationName
+            MERGE (configuration)-[:CONFIGURES]->(applicationModule)
+            RETURN configuration
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveProjectPackages">
+        <description>Links BC4J project package registrations to their components.</description>
+        <cypher><![CDATA[
+            MATCH (:Bc4jProject)-[:DECLARES_PACKAGE]->(package:Bc4jPackage)
+            MATCH (component)
+            WHERE component.qualifiedName STARTS WITH package.qualifiedName + "."
+              AND (component:Bc4jEntity OR component:Bc4jViewObject
+                   OR component:Bc4jEntityAssociation OR component:Bc4jViewLink
+                   OR component:Bc4jApplicationModule)
+            MERGE (package)-[:CONTAINS_COMPONENT]->(component)
+            RETURN package
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveProjectApplicationModules">
+        <description>Links project-declared ApplicationModules to their definitions.</description>
+        <cypher><![CDATA[
+            MATCH (project:Bc4jProject)
+            UNWIND project.applicationModuleNames AS applicationName
+            MATCH (applicationModule:Bc4jApplicationModule)
+            WHERE applicationModule.qualifiedName = applicationName
+            MERGE (project)-[:DECLARES_APPLICATION_MODULE]->(applicationModule)
+            RETURN applicationModule
+        ]]></cypher>
+    </concept>
+
+    <concept id="bc4j:ResolveViewAttributeMappings">
+        <requiresConcept refId="bc4j:ResolveEntityReferences" />
+        <description>Resolves ViewObject attributes to their mapped EntityObject attributes.</description>
+        <cypher><![CDATA[
+            MATCH (viewObject:Bc4jViewObject)-[:HAS_ATTRIBUTE]->(viewAttribute:Bc4jViewAttribute)
+            WHERE viewAttribute.entityUsageName IS NOT NULL
+              AND viewAttribute.entityAttributeName IS NOT NULL
+            MATCH (viewObject)-[:HAS_ENTITY_USAGE]->(usage:Bc4jEntityUsage)-[:REFERENCES_ENTITY]->(entity:Bc4jEntity)
+            WHERE usage.name = viewAttribute.entityUsageName
+            MATCH (entity)-[:HAS_ATTRIBUTE]->(entityAttribute:Bc4jEntityAttribute)
+            WHERE entityAttribute.name = viewAttribute.entityAttributeName
+            MERGE (viewAttribute)-[:MAPS_TO]->(entityAttribute)
+            RETURN viewAttribute
+        ]]></cypher>
+    </concept>
 
 </jqassistant-rules>
+

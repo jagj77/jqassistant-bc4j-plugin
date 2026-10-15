@@ -7,21 +7,34 @@
                     version="1.0.0">
 
     <description>
-        Plugin de jQAssistant que escanea los XML de definicion BC4J
-        (Entity, ViewObject, ViewLink) dentro de los .jar/.war del classpath
-        y los expone como nodos :Bc4jViewObject con mapeo a tabla.
-        Habilita el cruce con las entidades JPA para detectar zonas donde
-        BC4J y JPA operan sobre la misma tabla (y por lo tanto la transaccion
-        puede descoordinarse).
+        Plugin de jQAssistant que escanea definiciones BC4J y registra Entities,
+        ViewObjects, Associations, ViewLinks, ApplicationModules y metadatos de proyecto/configuracion
+        como nodos y relaciones tipados. Conserva lineage de tablas y atributos para analizar solapamientos con JPA.
     </description>
 
     <model>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jEntityDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jEntityUsageDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jEntityAttributeDescriptor</class>
         <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewObjectDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewAttributeDescriptor</class>
         <class>org.jqassistant.plugin.bc4j.api.model.Bc4jXmlFileDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewLinkDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewLinkEndDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jApplicationModuleDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jViewUsageDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jEntityAssociationDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jAssociationEndDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jApplicationModuleConfigDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jProjectDescriptor</class>
+        <class>org.jqassistant.plugin.bc4j.api.model.Bc4jPackageDescriptor</class>
     </model>
 
     <scanner>
         <class>org.jqassistant.plugin.bc4j.impl.scanner.Bc4jXmlScannerPlugin</class>
     </scanner>
+    <rules>
+        <resource>bc4j.xml</resource>
+    </rules>
 
 </jqassistant-plugin>

@@ -17,11 +17,10 @@
 
     <name>jQAssistant BC4J Plugin</name>
     <description>
-        Plugin de jQAssistant que escanea los XML de definicion BC4J
-        (Entity, ViewObject, ViewLink) dentro de cualquier .jar/.war del
-        classpath y crea nodos :Bc4jViewObject con su mapeo a tabla.
-        Habilita el cruce con las entidades JPA (regla :domain:JpaEntityTableMapping)
-        para identificar zonas donde BC4J y JPA operan sobre la misma fila.
+        Plugin de jQAssistant que escanea definiciones BC4J y registra Entities,
+        ViewObjects, Associations, ViewLinks, ApplicationModules y metadatos de proyecto/configuracion
+        como nodos y relaciones tipados. Conserva lineage de tablas y atributos
+        para analizar solapamientos con JPA.
     </description>
 
     <url>https://github.com/jqassistant-plugin/jqassistant-bc4j-plugin</url>
@@ -87,6 +86,16 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jsqlparser</groupId>
+            <artifactId>jsqlparser</artifactId>
+            <version>5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.buschmais.jqassistant.core</groupId>
+            <artifactId>test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

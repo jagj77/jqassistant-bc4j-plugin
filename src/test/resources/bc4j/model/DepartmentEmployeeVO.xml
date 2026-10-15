@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<ViewObject Name="DepartmentEmployeeVO">
+    <EntityUsage Name="Department" Entity="model.entities.DepartmentEO" JoinType="INNER JOIN"/>
+    <EntityUsage Name="Employee" Entity="model.entities.EmployeeEO" JoinType="INNER JOIN"/>
+</ViewObject>

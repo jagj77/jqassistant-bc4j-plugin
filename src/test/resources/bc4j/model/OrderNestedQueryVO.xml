@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<ViewObject Name="OrderNestedQueryVO">
+    <SQLQuery><![CDATA[
+        SELECT order_rows.ORDER_ID, products.PRODUCT_ID
+        FROM (SELECT ORDER_ID FROM ORDERS) order_rows
+        JOIN PRODUCTS products ON products.ORDER_ID = order_rows.ORDER_ID
+    ]]></SQLQuery>
+</ViewObject>

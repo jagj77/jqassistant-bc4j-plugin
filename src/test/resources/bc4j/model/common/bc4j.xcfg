@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BC4JConfig xmlns="http://xmlns.oracle.com/bc4j/configuration" version="11.1">
+    <AppModuleConfigBag ApplicationName="model.OrderModule">
+        <AppModuleConfig name="OrderModuleLocal" DeployPlatform="LOCAL" JDBCName="orders" ApplicationName="model.OrderModule">
+            <AM-Pooling jbo.ampool.maxpoolsize="10" jbo.locking.mode="optimistic"/>
+            <Database jbo.server.internal_connection="jdbc:oracle:thin:testUser/testPassword@localhost:1521:XE" jbo.TypeMapEntries="Java"/>
+            <Security AppModuleJndiName="model.OrderModule"/>
+        </AppModuleConfig>
+    </AppModuleConfigBag>
+</BC4JConfig>

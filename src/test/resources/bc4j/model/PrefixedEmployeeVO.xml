@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE bc4j:ViewObject SYSTEM "jbo_03_01.dtd">
+<bc4j:ViewObject xmlns:bc4j="http://xmlns.oracle.com/bc4j" Name="PrefixedEmployeeVO">
+    <bc4j:EntityUsage Name="Employee" Entity="model.EmployeeEO" JoinType="INNER JOIN"/>
+    <bc4j:ViewAttribute Name="EmployeeId" EntityUsage="Employee" EntityAttrName="EmployeeId"/>
+</bc4j:ViewObject>

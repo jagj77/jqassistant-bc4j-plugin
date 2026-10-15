@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<ViewObject Name="EmployeeVO" FromList="EMPLOYEE e" Where="e.EMPLOYEE_ID &gt; 0" ComponentClass="model.EmployeeVOImpl">
+    <EntityUsage Name="EmployeeEO1" Entity="model.EmployeeEO" JoinType="INNER JOIN"/>
+    <ViewAttribute Name="EmployeeId" EntityUsage="EmployeeEO1" EntityAttrName="EmployeeId" Type="java.lang.Long" IsUpdateable="true"/>
+</ViewObject>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Association SYSTEM "jbo_03_01.dtd">
+<Association Name="DepartmentEmployeeAssociation">
+    <AssociationEnd Name="Department" Cardinality="1" Source="true" Owner="model.entities.DepartmentEO">
+        <DesignTime>
+            <Attr Name="_foreignKey" Value="model.entities.DepartmentEO.DepartmentFk"/>
+            <Attr Name="_aggregation" Value="0"/>
+            <Attr Name="_isUpdateable" Value="true"/>
+        </DesignTime>
+        <AttrArray Name="Attributes">
+            <Item Value="model.entities.DepartmentEO.DepartmentId"/>
+        </AttrArray>
+    </AssociationEnd>
+    <AssociationEnd Name="Employees" Cardinality="-1" Owner="model.entities.EmployeeEO">
+        <DesignTime>
+            <Attr Name="_foreignKey" Value="model.entities.EmployeeEO.EmployeeDepartmentFk"/>
+            <Attr Name="_aggregation" Value="0"/>
+            <Attr Name="_isUpdateable" Value="true"/>
+        </DesignTime>
+        <AttrArray Name="Attributes">
+            <Item Value="model.entities.EmployeeEO.DepartmentId"/>
+        </AttrArray>
+    </AssociationEnd>
+</Association>

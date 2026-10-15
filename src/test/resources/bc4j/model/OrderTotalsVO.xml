@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ViewObject SYSTEM "jbo_03_01.dtd">
+<ViewObject Name="OrderTotalsVO">
+    <SQLQuery><![CDATA[
+        SELECT o.ORDER_ID, i.PRODUCT_ID
+        FROM ORDERS o
+        JOIN ORDER_ITEMS i ON i.ORDER_ID = o.ORDER_ID
+        WHERE o.ORDER_ID > 0
+    ]]></SQLQuery>
+</ViewObject>
